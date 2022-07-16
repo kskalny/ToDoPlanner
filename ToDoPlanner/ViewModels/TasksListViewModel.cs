@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ToDoPlanner.Commands;
+using ToDoPlanner.Stores;
 using ToDoPlannerLib.Interfaces;
 
 namespace ToDoPlanner.ViewModels
@@ -14,6 +15,8 @@ namespace ToDoPlanner.ViewModels
     {
         private readonly ObservableCollection<TaskViewModel> _tasks;
         private readonly IToDoService _service;
+        private readonly NavigationStore _navigation;
+
 
 
         void TaskDeleted(ITask task)
@@ -22,22 +25,31 @@ namespace ToDoPlanner.ViewModels
             if (__task_to_clear != null)
                 _tasks.Remove(__task_to_clear); 
         }
-        public TasksListViewModel(IToDoService service)
+        private void CreateTask(ITask task)
+        {
+            var author = _service.GetAuthoById(task.AuthorId);
+            _tasks.Add(
+                new TaskViewModel(task, author));
+        }
+    
+        public TasksListViewModel(IToDoService service , NavigationStore navigation)
         {
             _service = service;
             _tasks = new ObservableCollection<TaskViewModel>();
+            _navigation = navigation;
             _service.TaskDeleted += TaskDeleted;
+            _service.TaskCreated += CreateTask;
             foreach (var task in _service.GetTasksAsObservableCollectin())
             {
-                var author = _service.GetAuthoById(task.AuthorId);
-                _tasks.Add(
-                    new TaskViewModel(task, author));
+                CreateTask(task);
             }
         }
 
         public IEnumerable<TaskViewModel> Tasks => _tasks;
 
         public ICommand DeleteTask => new DeleteTask(_service);
+
+        public ICommand CreateRoute => new Route(_navigation, "create");
 
             
     

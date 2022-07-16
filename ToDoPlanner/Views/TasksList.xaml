@@ -71,7 +71,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1">Create New Task</Button>
+            <Button Grid.Column="1" Content="Create New Task" Command="{Binding CreateRoute}" />
         </Grid>
     </Grid>
 </UserControl>

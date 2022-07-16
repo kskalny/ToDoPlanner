@@ -14,20 +14,20 @@ namespace ToDoPlannerLib
             _repo = repository;
         }
 
-        public ITask CreateTask(string title)
+        public bool AddTask(ITask task)
         {
-            return new ToDoTask()
-            {
-                Title = title
+            var _task = _repo.AddTask(task);
+            if (_task == null) { return false; };
 
-            };
+            OnTaskCreation(_task);
+            return true;
         }
+
 
         public bool DeleteTaskById(int id)
         {
             var _task = _repo.DeleteTaskById(id);
             if (_task == null) { return false; };
-
 
             OnTaskDeletion(_task);
             return true;
@@ -56,6 +56,10 @@ namespace ToDoPlannerLib
         private void OnTaskDeletion(ITask task)
         {
             TaskDeleted?.Invoke(task);
+        }
+        private void OnTaskCreation(ITask task)
+        {
+            TaskCreated?.Invoke(task);
         }
     }   
     

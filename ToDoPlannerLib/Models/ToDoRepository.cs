@@ -103,18 +103,26 @@ namespace ToDoPlannerLib.Models
 
         public ITask? AddTask(ITask task)
         {
-            connector.Tasks.Add(
-                new ToDoTask()
-                {
-                    TaskId = task.TaskId,
-                    Title = task.Title,
-                    Description = task.Description,
-                    DueDate = task.DueDate,
-                    AuthorId = task.AuthorId,
-                    CategoryId = task.CategoryId
-                }
-            );
-            return (connector.SaveChanges() == 1) ? task:null ;
+            if (task.Title is null) { return null; }
+            var new_task = new ToDoTask()
+            {
+                Title = task.Title,
+                Description = task.Description,
+                DueDate = task.DueDate,
+                AuthorId = 1,
+                CategoryId = 1
+            };
+            connector.Tasks.Add(new_task);
+            try
+            {
+                return (connector.SaveChanges() == 1) ? new_task : null;
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+            {
+                return null;
+            }
+
+
         }
 
         public ITask? DeleteTask(ITask task)
@@ -141,7 +149,7 @@ namespace ToDoPlannerLib.Models
         public IAuthor GetAuthoById(int id)
         {
             var result =  connector.Authors.Find(id);
-            if (result is null) { throw new Exception(); }
+            if (result == null) { throw new Exception(); }
             return result;
         }
 

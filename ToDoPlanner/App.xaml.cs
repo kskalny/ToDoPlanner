@@ -19,31 +19,41 @@ namespace ToDoPlanner
     public partial class App : Application
     {
         private readonly IToDoService _service;
-        private readonly NavigationStore _store;
+        private readonly NavigationStore _navigation;
 
         public App()
         {
-            _store = new NavigationStore();
             var dbName = ToDoPlanner.Properties.Settings.Default.DatabaseName;
             //Deplendency injection:
             var repository = new ToDoPlannerLib.Models.ToDoRepository(dbName);
             _service = new ToDoPlannerLib.Service(repository);
-            CreateTasksListViewModel();
+
+
+      
+            _navigation = new NavigationStore();
+            _navigation.Add("create", CreateTaskCreationViewModel());
+            _navigation.Add("list", CreateTasksListViewModel());
+
         }
         protected override void OnStartup(StartupEventArgs e)
         {
             MainWindow = new MainWindow()
             {
-                DataContext = new MainViewModel(_store)
+                DataContext = new MainViewModel(_navigation)
             };
-            _store.CurrentViewModel = CreateTasksListViewModel();
+
+            _navigation.Route("list");
             MainWindow.Show();
             //base.OnStartup(e);
         }
 
         private TasksListViewModel CreateTasksListViewModel()
         {
-            return new TasksListViewModel(_service);
+            return new TasksListViewModel(_service, _navigation);
+        }
+        private TaskCreationViewModel CreateTaskCreationViewModel()
+        {
+            return new TaskCreationViewModel(_service, _navigation);
         }
     }
 }
