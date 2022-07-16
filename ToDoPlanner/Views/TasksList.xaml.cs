@@ -13,23 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ToDoPlanner
+namespace ToDoPlanner.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for TasksList.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class TasksList : UserControl
     {
-        public MainWindow()
+        public TasksList()
         {
             InitializeComponent();
-        }
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
-
-            // Begin dragging the window
-            this.DragMove();
         }
     }
 }

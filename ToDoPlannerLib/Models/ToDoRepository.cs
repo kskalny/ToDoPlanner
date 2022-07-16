@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -76,7 +77,7 @@ namespace ToDoPlannerLib.Models
 
         public ToDoRepository(string DatabaseName)
         {
-            connector = new ToDoDBConnector(DatabaseName);
+            connector = new ToDoDBConnector(DatabaseName, true);
         }
 
         public bool AddTask(ITask task)
@@ -97,12 +98,33 @@ namespace ToDoPlannerLib.Models
 
         public bool DeleteTask(ITask task)
         {
-            throw new NotImplementedException();
+            var taskToDelete = connector.Tasks.Find(task);
+            if (taskToDelete is null)
+            {
+                return false;
+            }
+            connector.Tasks.Remove(taskToDelete);
+            return connector.SaveChanges() == 1;
+
         }
 
         public bool DeleteTaskById(int taskId)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<ITask>> GetTasks()
+        {
+            throw new NotImplementedException();
+        }
+
+        //public async Task<IEnumerable<ITask>> GetTasks()
+        //{
+        //    return  await connector.Tasks.ToListAsync();
+        //}
+        public ObservableCollection<ITask> GetTasksAsObservableCollectin()
+        {
+            return new ObservableCollection<ITask>(connector.Tasks);
         }
     }
 }

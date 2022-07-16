@@ -3,33 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ToDoPlanner"
+        xmlns:views="clr-namespace:ToDoPlanner.Views"
+        xmlns:vms="clr-namespace:ToDoPlanner.ViewModels" d:DataContext="{d:DesignInstance Type=vms:TasksListViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="450"
         WindowStyle="None"
         ResizeMode="NoResize">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-
-        <GroupBox Header="Login">
-            <TextBox MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="InputTextBox"/>
-        </GroupBox>
-        <GroupBox Header="Password" Grid.Row="1">
-            <PasswordBox HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top" Width="262" Height="54" RenderTransformOrigin="0.5,0.5">
-                <PasswordBox.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform AngleX="-2.059"/>
-                        <RotateTransform/>
-                        <TranslateTransform X="-0.971"/>
-                    </TransformGroup>
-                </PasswordBox.RenderTransform>
-            </PasswordBox>
-        </GroupBox>
-
-
+    <Grid Margin="20 10">
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type vms:TasksListViewModel}">
+                <views:TasksList />
+            </DataTemplate>
+        </Grid.Resources>
+        <ContentControl Content="{Binding CurrentViewModel}" />
     </Grid>
 </Window>

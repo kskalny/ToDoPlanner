@@ -7,14 +7,10 @@ using System.Threading.Tasks;
 
 namespace ToDoPlannerLib.Interfaces
 {
-    public interface IToDoRepository
+    public interface IToDoService
     {
-        ObservableCollection<ITask> GetTasksAsObservableCollectin();
         Task<IEnumerable<ITask>> GetTasks();
-
-        bool AddTask(ITask task);
-        bool DeleteTask(ITask task);
-        bool DeleteTaskById(int taskId);
+        ObservableCollection<ITask> GetTasksAsObservableCollectin();
 
     }
 }
