@@ -17,7 +17,9 @@ namespace ToDoPlanner
         protected override void OnStartup(StartupEventArgs e)
         {
             var dbName = ToDoPlanner.Properties.Settings.Default.DatabaseName;
-            var service = new ToDoPlannerLib.Service(dbName);
+            //Deplendency injection:
+            var repository = new ToDoPlannerLib.Models.ToDoRepository(dbName);
+            var service = new ToDoPlannerLib.Service(repository);
             base.OnStartup(e);
         }
     }

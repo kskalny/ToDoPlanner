@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using ToDoPlannerLib.Interfaces;
 
 namespace ToDoPlannerLib.Models
 {
-    class ToDoRepository : DbContext
+    internal class ToDoDBConnector : DbContext
     {
-        private string dbName;
+        private readonly string dbName;
         private void InitDummyData()
         {
             var cat1 = new Category()
@@ -32,9 +33,9 @@ namespace ToDoPlannerLib.Models
             var task = new ToDoTask()
             {
                 Title = "Test",
-                Description= "Test",
+                Description = "Test",
                 DueDate = DateTime.Now,
-                Category=cat1,
+                Category = cat1,
                 Author = author
             };
             Categories.Add(cat1);
@@ -45,7 +46,7 @@ namespace ToDoPlannerLib.Models
             SaveChanges();
         }
 
-        public ToDoRepository(string dbName, bool test=false)
+        public ToDoDBConnector(string dbName, bool test = false)
         {
             this.dbName = dbName;
             if (test) Database.EnsureDeleted();
@@ -67,6 +68,41 @@ namespace ToDoPlannerLib.Models
         {
             optionsBuilder.UseSqlite(
                 $"Data Source={this.dbName}");
+        }
+    }
+    public class ToDoRepository : IToDoRepository
+    {
+        private readonly ToDoDBConnector connector;
+
+        public ToDoRepository(string DatabaseName)
+        {
+            connector = new ToDoDBConnector(DatabaseName);
+        }
+
+        public bool AddTask(ITask task)
+        {
+            connector.Tasks.Add(
+                new ToDoTask()
+                {
+                    TaskId = task.TaskId,
+                    Title = task.Title,
+                    Description = task.Description,
+                    DueDate = task.DueDate,
+                    AuthorId = task.AuthorId,
+                    CategoryId = task.CategoryId
+                }
+            );
+            return connector.SaveChanges() == 1;
+        }
+
+        public bool DeleteTask(ITask task)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteTaskById(int taskId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

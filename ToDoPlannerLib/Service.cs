@@ -1,19 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using ToDoPlannerLib.Interfaces;
 using ToDoPlannerLib.Models;
 
 namespace ToDoPlannerLib
 {
      public class Service
     {
-        private string DatabaseName { get; init;}
-        private readonly ToDoRepository _repo;
+        private readonly IToDoRepository _repo;
 
-        public Service(string databaseName)
+        public Service(IToDoRepository repository)
         {
-            DatabaseName = databaseName;
-            _repo = new ToDoRepository(DatabaseName, true);
+            _repo = repository;
+        }
 
+        public ITask CreateTask(string title)
+        {
+            return new ToDoTask()
+            {
+                Title = title
+
+            };
         }
     }
     
