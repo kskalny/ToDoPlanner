@@ -8,7 +8,7 @@ namespace ToDoPlannerLib.Interfaces
 {
     public interface ICategory
     {
-        public int CategoryId { get; init; }
+        public int CategoryId { get; set; }
         public string Name { get; set; }
     }
 }

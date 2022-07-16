@@ -8,9 +8,9 @@ namespace ToDoPlannerLib.Interfaces
 {
     public interface IComment
     {
-        public int CommentId { get; init; }
+        public int CommentId { get; set; }
         public string Content { get; set; }
-        public int AuthorId { get; init; }
+        public int AuthorId { get; set; }
 
     }
 }

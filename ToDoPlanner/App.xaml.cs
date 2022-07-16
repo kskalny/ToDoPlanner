@@ -16,7 +16,6 @@ namespace ToDoPlanner
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            
             var dbName = ToDoPlanner.Properties.Settings.Default.DatabaseName;
             var service = new ToDoPlannerLib.Service(dbName);
             base.OnStartup(e);
