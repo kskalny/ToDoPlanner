@@ -15,13 +15,20 @@
 
         <TextBlock Text="To Do Items List:" Grid.Row="0" Style="{StaticResource Header}"/>
         <ListView Grid.Row="1"
-                  ItemsSource="{Binding Tasks}"> 
+                  ItemsSource="{Binding Tasks}">
             <ListView.View>
                 <GridView>
+                    <GridViewColumn Header="Completed">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Completed}"/>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Header="Title">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="12" />
+                                <TextBlock Text="{Binding Title}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -32,10 +39,10 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="AuthorId">
+                    <GridViewColumn Header="Author">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding AuthorId}" />
+                                <TextBlock Text="{Binding Author}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -43,11 +50,21 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding DueDate}" />
+
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
+            <ListView.ContextMenu>
+
+                <ContextMenu>
+                    <MenuItem  Header="Edit Task"/>
+                    <MenuItem  Header="Delete Task" Command="{Binding DeleteTask}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"/>
+                </ContextMenu>
+  
+  
+            </ListView.ContextMenu>
         </ListView>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>

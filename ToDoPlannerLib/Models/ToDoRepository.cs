@@ -31,19 +31,40 @@ namespace ToDoPlannerLib.Models
             {
                 Name = "Kamil Skalny"
             };
+
             var task = new ToDoTask()
             {
-                Title = "Test",
+                Title = "Stop delaying important things.",
                 Description = "Test",
                 DueDate = DateTime.Now,
                 Category = cat1,
                 Author = author
             };
+            var task1 = new ToDoTask()
+            {
+                Title = "Complete the application.",
+                Description = "Test",
+                DueDate = DateTime.Now,
+                Category = cat1,
+                Author = author
+            };
+            var task2 = new ToDoTask()
+            {
+                Title = "Have a great vacation in work.",
+                Description = "Test",
+                DueDate = DateTime.Now,
+                Category = cat1,
+                Author = author
+            };
+            
             Categories.Add(cat1);
             Categories.Add(cat2);
             Categories.Add(cat3);
             Authors.Add(author);
             Tasks.Add(task);
+            Tasks.Add(task1);
+            Tasks.Add(task2);
+
             SaveChanges();
         }
 
@@ -80,7 +101,7 @@ namespace ToDoPlannerLib.Models
             connector = new ToDoDBConnector(DatabaseName, true);
         }
 
-        public bool AddTask(ITask task)
+        public ITask? AddTask(ITask task)
         {
             connector.Tasks.Add(
                 new ToDoTask()
@@ -93,25 +114,37 @@ namespace ToDoPlannerLib.Models
                     CategoryId = task.CategoryId
                 }
             );
-            return connector.SaveChanges() == 1;
+            return (connector.SaveChanges() == 1) ? task:null ;
         }
 
-        public bool DeleteTask(ITask task)
+        public ITask? DeleteTask(ITask task)
         {
             var taskToDelete = connector.Tasks.Find(task);
             if (taskToDelete is null)
             {
-                return false;
+                return null;
             }
             connector.Tasks.Remove(taskToDelete);
-            return connector.SaveChanges() == 1;
+            return (connector.SaveChanges() == 1) ? task : null;
 
         }
 
-        public bool DeleteTaskById(int taskId)
+        public ITask? DeleteTaskById(int taskId)
         {
-            throw new NotImplementedException();
+            var result = connector.Tasks.Find(taskId);
+            if (result is null) { return null; }
+            connector.Tasks.Remove(result);
+
+            return (connector.SaveChanges() == 1) ? result : null;
         }
+
+        public IAuthor GetAuthoById(int id)
+        {
+            var result =  connector.Authors.Find(id);
+            if (result is null) { throw new Exception(); }
+            return result;
+        }
+
 
         public Task<IEnumerable<ITask>> GetTasks()
         {

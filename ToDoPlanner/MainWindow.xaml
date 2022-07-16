@@ -6,7 +6,7 @@
         xmlns:views="clr-namespace:ToDoPlanner.Views"
         xmlns:vms="clr-namespace:ToDoPlanner.ViewModels" d:DataContext="{d:DesignInstance Type=vms:TasksListViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="450"
+        Title="MainWindow" Height="800" Width="auto"
         WindowStyle="None"
         ResizeMode="NoResize">
     <Grid Margin="20 10">

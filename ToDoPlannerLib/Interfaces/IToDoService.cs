@@ -12,5 +12,13 @@ namespace ToDoPlannerLib.Interfaces
         Task<IEnumerable<ITask>> GetTasks();
         ObservableCollection<ITask> GetTasksAsObservableCollectin();
 
+        IAuthor GetAuthoById(int id);
+        bool DeleteTaskById(int id);
+
+        public event Action<ITask> TaskCreated;
+        public event Action<ITask> TaskDeleted;
+        public event Action<ITask> TaskChanged;
+
+
     }
 }

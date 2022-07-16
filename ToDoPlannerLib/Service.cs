@@ -23,6 +23,22 @@ namespace ToDoPlannerLib
             };
         }
 
+        public bool DeleteTaskById(int id)
+        {
+            var _task = _repo.DeleteTaskById(id);
+            if (_task == null) { return false; };
+
+
+            OnTaskDeletion(_task);
+            return true;
+        
+        }
+
+        public IAuthor GetAuthoById(int id)
+        {
+            return _repo.GetAuthoById(id);
+        }
+
         public Task<IEnumerable<ITask>> GetTasks()
         {
             return _repo.GetTasks();
@@ -32,6 +48,16 @@ namespace ToDoPlannerLib
         {
             return _repo.GetTasksAsObservableCollectin();
         }
+
+        public event Action<ITask> TaskCreated;
+        public event Action<ITask> TaskDeleted;
+        public event Action<ITask> TaskChanged;
+
+        private void OnTaskDeletion(ITask task)
+        {
+            TaskDeleted?.Invoke(task);
+        }
     }   
+    
     
 }
